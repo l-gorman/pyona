@@ -9,5 +9,5 @@ setup(
     author='Léo Gorman',
     author_email='leomgorman@outlook.com',
     packages=['pyona'],  # same as name
-    install_requires=['pandas', 'requests', 'json']
+    install_requires=['pandas', 'requests']
 )
