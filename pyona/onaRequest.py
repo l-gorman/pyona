@@ -1,10 +1,24 @@
+import requests
+import json
+import pandas as pd
 
 __all__ = ["onaRequest"]  # making sure that the class gets imported
 
 
 class onaRequest:
+    """Class for requesting data from the ONA platform
 
+    Example:
+        r = onaRequest("test_user", test_password")
+
+
+
+
+    Returns:
+        _type_: _description_
+    """
     # =======================================================================
+
     def __init__(self, username, password, url="https://api.ona.io/api/v1"):
         """Init class by setting the basic things needed for an ONA request. 
         User name, password, and URL.
