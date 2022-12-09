@@ -1,0 +1,67 @@
+
+name: Build Docs
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Cache pip
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+   
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Make HTML
+        working-directory: ./docs
+        run: make html
+      
+
+      # - name: Modify CNAME file to contain correct directory
+      #   run: |
+      #     file_contents=$(<./build/CNAME) &&
+      #     echo "${file_contents//'TESTDOMAIN'/'app.l-gorman.com'}" > ./build/CNAME
+
+      - name: Init new repo in build folder and commit generated files
+        run: |
+          touch docs/_build/html/.nojekyll
+          cd docs/_build/html
+          git init
+          git add -A
+          git config --local user.email "${{secrets.GITHUBEMAIL}}"
+          git config --local user.name "${{secrets.GITHUBUSERNAME}}"
+          git commit -m 'deploy'
+      - name: Force push to destination branch
+        uses: ad-m/github-push-action@master
+        with:
+          # Token for the repo
+          # Can be passed in using $\{{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PUBLISHPAT }}
+          # Destination branch to push changes
+          branch: gh-pages
+          # Force the changes through
+          force: true
+          # Change to the build directory before pushing
+          directory: ./_build/html
