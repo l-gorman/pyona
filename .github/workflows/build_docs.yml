@@ -64,4 +64,4 @@ jobs:
           # Force the changes through
           force: true
           # Change to the build directory before pushing
-          directory: ./_build/html
+          directory: ./docs/_build/html
