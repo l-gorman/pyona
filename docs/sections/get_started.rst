@@ -7,14 +7,21 @@ Installation
 
 Install using the command:
 
-``
-pip3 install git+https://github.com/l-gorman/pyona
-``
+.. code-block:: bash
+
+    pip3 install git+https://github.com/l-gorman/pyona
+
 
 
 Basic Usage
 -----------------------------------------
 
-``
-r
-``
+.. code-block:: python
+
+    from pyona import onaRequest
+
+    r = onaRequest(username='ONAusername', password='onaPassword')
+
+    r.fetch_data("ESSA - KE -  Contributor Enrolment")
+
+    results = r.submissions_dataframe()
